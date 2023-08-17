@@ -6,6 +6,7 @@ import { PuffLoader } from "react-spinners";
 import { AiFillHeart, AiTwotoneCar } from "react-icons/ai";
 import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import { FaShower } from "react-icons/fa";
+import Map from "../../components/Map/Map";
 
 const Property = () => {
   const { propertyId } = useParams();
@@ -99,7 +100,13 @@ const Property = () => {
           </div>
 
           {/* right side */}
-          <div className="right">this is right side</div>
+          <div className="map">
+            <Map
+              address={data?.address}
+              city={data?.city}
+              country={data?.country}
+            />
+          </div>
         </div>
       </div>
     </div>

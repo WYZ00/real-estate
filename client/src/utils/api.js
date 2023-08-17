@@ -8,9 +8,20 @@ export const api = axios.create({
 
 export const getAllProperties = async () => {
   try {
-    const response = await api.get("/residencies", {
-      timeout: 10 * 1000,
-    });
+    const response = await api.get("/residencies");
+    if (response.status === 400 || response.status === 500) {
+      throw response.data;
+    }
+    return response.data;
+  } catch (error) {
+    toast.error("Something went Wrong");
+    throw error;
+  }
+};
+
+export const getProperty = async (id) => {
+  try {
+    const response = await api.get(`/residencies/${id}`);
     if (response.status === 400 || response.status === 500) {
       throw response.data;
     }

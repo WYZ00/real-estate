@@ -10,7 +10,7 @@ import {
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import data from "../../utils/accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Value = () => {
   return (

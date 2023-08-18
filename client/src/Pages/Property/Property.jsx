@@ -7,6 +7,8 @@ import { AiFillHeart, AiTwotoneCar } from "react-icons/ai";
 import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import { FaShower } from "react-icons/fa";
 import Map from "../../components/Map/Map";
+import { useState } from "react";
+import useAuthCheck from "../../hooks/useAuthCheck";
 
 const Property = () => {
   const { propertyId } = useParams();
@@ -18,6 +20,9 @@ const Property = () => {
       refetchOnWindowFocus: false,
     }
   );
+
+  const [modalOpened, setModalOpened] = useState(false);
+  const { validateLogin } = useAuthCheck();
 
   if (isLoading) {
     return (
@@ -96,7 +101,15 @@ const Property = () => {
             </div>
 
             {/* booking button */}
-            <button className="button">Book your visit</button>
+            <button
+              className="button"
+              onClick={() => {
+                validateLogin() && setModalOpened(true);
+              }}>
+              Book your visit
+            </button>
+
+            <BookingModal />
           </div>
 
           {/* right side */}

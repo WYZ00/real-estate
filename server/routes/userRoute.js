@@ -7,14 +7,15 @@ import {
   createUser,
   toFav,
 } from "../controllers/userController.js";
+import jwtCheck from "../config/auth0Config.js";
 
 const router = express.Router();
 
-router.post("/register", createUser);
+router.post("/register", jwtCheck, createUser);
 router.post("/allBookings", bookVisitAll);
-router.post("/bookvisits/:id", bookVisit);
-router.post("/removeBooking/:id", cancelBooking);
-router.post("/toFav/:rid", toFav);
-router.post("/allFav", allFav);
+router.post("/bookvisits/:id", jwtCheck, bookVisit);
+router.post("/removeBooking/:id", jwtCheck, cancelBooking);
+router.post("/toFav/:rid", jwtCheck, toFav);
+router.post("/allFav", jwtCheck, allFav);
 
 export { router as userRouter };

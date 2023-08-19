@@ -14,7 +14,6 @@ export const createResidency = asyncHandler(async (req, res) => {
     userEmail,
   } = req.body.data;
 
-  console.log(req.body.data);
 
   try {
     const residency = await prisma.residency.create({

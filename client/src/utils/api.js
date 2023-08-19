@@ -14,7 +14,7 @@ export const getAllProperties = async () => {
     }
     return response.data;
   } catch (error) {
-    toast.error("Something went Wrong");
+    toast.error("Something went Wrong getAllProperties");
     throw error;
   }
 };
@@ -27,7 +27,7 @@ export const getProperty = async (id) => {
     }
     return response.data;
   } catch (error) {
-    toast.error("Something went Wrong");
+    toast.error("Something went Wrong getProperty");
     throw error;
   }
 };
@@ -44,7 +44,47 @@ export const createUser = async (email, token) => {
       }
     );
   } catch (error) {
-    toast.error("Something went wrong,Please try again");
+    toast.error("Something went wrong,Please try again createUser");
+    throw error;
+  }
+};
+
+export const bookVisit = async (date, propertyId, email, token) => {
+  try {
+    await api.post(
+      `/users/bookvisits/${propertyId}`,
+      {
+        email,
+        id: propertyId,
+        date: dayjs(date).format("DD/MM/YYYY"),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    toast.error("Something went wrong,Please try again bookVisit");
+    throw error;
+  }
+};
+
+export const removeBooking = async (id, email, token) => {
+  try {
+    await api.post(
+      `/users/removeBooking/${id}`,
+      {
+        email,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (error) {
+    toast.error("Something went wrong,Please try again remove");
     throw error;
   }
 };

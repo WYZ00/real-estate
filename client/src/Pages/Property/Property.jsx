@@ -14,6 +14,7 @@ import BookingModal from "../../components/BookingModal/BookingModal";
 import userDetailContext from "../../context/UserDetailContext";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
+import Heart from "../../components/Heart/Heart";
 
 const Property = () => {
   const { propertyId } = useParams();
@@ -71,7 +72,7 @@ const Property = () => {
       <div className="flexColStart paddings innerWidth property-container">
         {/* like button */}
         <div className="like">
-          <AiFillHeart size={24} color="white" />
+          <Heart id={propertyId} />
         </div>
 
         {/* image */}
@@ -124,7 +125,8 @@ const Property = () => {
 
             {/* booking button */}
             {bookings?.map((booking) => booking.id).includes(propertyId) ? (
-              <>P
+              <>
+                P
                 <Button
                   variant="outline"
                   w={"100%"}

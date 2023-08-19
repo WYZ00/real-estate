@@ -16,6 +16,7 @@
   width: 100%;
   border-radius: 1rem;
   object-fit: cover;
+  user-select: none;
 }
 
 .property-details {
@@ -44,11 +45,11 @@
   gap: 0.5rem;
 }
 
-.property-details .button{
+.property-details .button {
   width: 100%;
   margin-top: 1rem;
 }
 
-.property-details .button:hover{
+.property-details .button:hover {
   transform: scale(1.05);
 }

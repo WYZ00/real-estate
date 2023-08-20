@@ -4,8 +4,7 @@ import { getAllProperties } from "../utils/api";
 const useProperties = () => {
   const { data, isLoading, isError, refetch } = useQuery(
     "allProperties",
-    getAllProperties,
-    { refetchOnWindowFocus: false }
+    getAllProperties
   );
   return {
     data,

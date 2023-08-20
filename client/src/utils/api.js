@@ -107,3 +107,43 @@ export const toFav = async (id, email, token) => {
     throw error;
   }
 };
+
+export const getALlFav = async (email, token) => {
+  if (!token) return;
+  try {
+    const res = await api.post(
+      "users/allFav",
+      { email },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data["favResidenciesID"];
+  } catch (error) {
+    toast.error("Something went wrong,please try again getALlFav");
+    throw error;
+  }
+};
+
+export const getALlBookings = async (email, token) => {
+  if (!token) return;
+  try {
+    const res = await api.post(
+      "/users/allBookings",
+      {
+        email,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res.data["bookedVisits"];
+  } catch (error) {
+    toast.error("Something went wrong,please try again getALlBookings");
+    throw error;
+  }
+};

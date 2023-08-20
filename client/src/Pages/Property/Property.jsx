@@ -1,30 +1,27 @@
-import { useParams } from "react-router-dom";
-import "./Property.css";
+import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { useLocation } from "react-router-dom";
 import { getProperty, removeBooking } from "../../utils/api";
 import { PuffLoader } from "react-spinners";
-import { AiFillHeart, AiTwotoneCar } from "react-icons/ai";
-import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
+import { AiFillHeart } from "react-icons/ai";
+import "./Property.css";
+
 import { FaShower } from "react-icons/fa";
+import { AiTwotoneCar } from "react-icons/ai";
+import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import Map from "../../components/Map/Map";
-import { useContext, useState } from "react";
 import useAuthCheck from "../../hooks/useAuthCheck";
 import { useAuth0 } from "@auth0/auth0-react";
 import BookingModal from "../../components/BookingModal/BookingModal";
-import userDetailContext from "../../context/UserDetailContext";
+import UserDetailContext from "../../context/UserDetailContext.js";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
-
 const Property = () => {
-  const { propertyId } = useParams();
-
-  const { data, isLoading, isError } = useQuery(
-    ["resd", propertyId],
-    () => getProperty(propertyId),
-    {
-      refetchOnWindowFocus: false,
-    }
+  const { pathname } = useLocation();
+  const id = pathname.split("/").slice(-1)[0];
+  const { data, isLoading, isError } = useQuery(["resd", id], () =>
+    getProperty(id)
   );
 
   const [modalOpened, setModalOpened] = useState(false);
@@ -34,15 +31,16 @@ const Property = () => {
   const {
     userDetails: { token, bookings },
     setUserDetails,
-  } = useContext(userDetailContext);
+  } = useContext(UserDetailContext);
 
   const { mutate: cancelBooking, isLoading: cancelling } = useMutation({
-    mutationFn: () => removeBooking(propertyId, user?.email, token),
+    mutationFn: () => removeBooking(id, user?.email, token),
     onSuccess: () => {
       setUserDetails((prev) => ({
         ...prev,
-        bookings: prev.bookings.filter((booking) => booking?.id !== propertyId),
+        bookings: prev.bookings.filter((booking) => booking?.id !== id),
       }));
+
       toast.success("Booking cancelled", { position: "bottom-right" });
     },
   });
@@ -72,40 +70,46 @@ const Property = () => {
       <div className="flexColStart paddings innerWidth property-container">
         {/* like button */}
         <div className="like">
-          <Heart id={propertyId} />
+          <Heart id={id} />
         </div>
 
         {/* image */}
-        <img src={data?.image} alt={data.title} />
+        <img src={data?.image} alt="home image" />
 
         <div className="flexCenter property-details">
-          {/* left side */}
+          {/* left */}
           <div className="flexColStart left">
             {/* head */}
             <div className="flexStart head">
               <span className="primaryText">{data?.title}</span>
               <span className="orangeText" style={{ fontSize: "1.5rem" }}>
-                ${data?.price}
+                $ {data?.price}
               </span>
             </div>
 
             {/* facilities */}
             <div className="flexStart facilities">
+              {/* bathrooms */}
               <div className="flexStart facility">
-                <FaShower size={20} color="#1f3e72" />
-                <span>{data?.facilities.bathrooms} Bathrooms</span>
+                <FaShower size={20} color="#1F3E72" />
+                <span>{data?.facilities?.bathrooms} Bathrooms</span>
               </div>
+
+              {/* parkings */}
               <div className="flexStart facility">
-                <AiTwotoneCar size={20} color="#1f3e72" />
+                <AiTwotoneCar size={20} color="#1F3E72" />
                 <span>{data?.facilities.parkings} Parking</span>
               </div>
+
+              {/* rooms */}
               <div className="flexStart facility">
-                <MdMeetingRoom size={20} color="1f3e72" />
-                <span>{data?.facilities.bedrooms} Rooms</span>
+                <MdMeetingRoom size={20} color="#1F3E72" />
+                <span>{data?.facilities.bedrooms} Room/s</span>
               </div>
             </div>
 
             {/* description */}
+
             <span className="secondaryText" style={{ textAlign: "justify" }}>
               {data?.description}
             </span>
@@ -115,18 +119,13 @@ const Property = () => {
             <div className="flexStart" style={{ gap: "1rem" }}>
               <MdLocationPin size={25} />
               <span className="secondaryText">
-                {data?.address}
-                <br />
-                {data?.city}
-                <br />
-                {data?.country}
+                {data?.address} {data?.city} {data?.country}
               </span>
             </div>
 
             {/* booking button */}
-            {bookings?.map((booking) => booking.id).includes(propertyId) ? (
+            {bookings?.map((booking) => booking.id).includes(id) ? (
               <>
-                P
                 <Button
                   variant="outline"
                   w={"100%"}
@@ -137,10 +136,7 @@ const Property = () => {
                 </Button>
                 <span>
                   Your visit already booked for date{" "}
-                  {
-                    bookings?.filter((booking) => booking?.id === propertyId)[0]
-                      .date
-                  }
+                  {bookings?.filter((booking) => booking?.id === id)[0].date}
                 </span>
               </>
             ) : (
@@ -156,7 +152,7 @@ const Property = () => {
             <BookingModal
               opened={modalOpened}
               setOpened={setModalOpened}
-              propertyId={propertyId}
+              propertyId={id}
               email={user?.email}
             />
           </div>
@@ -174,4 +170,5 @@ const Property = () => {
     </div>
   );
 };
+
 export default Property;
